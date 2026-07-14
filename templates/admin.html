@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>【管理用】顧客フィードバック一覧</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .status-done { color: green; font-weight: bold; }
+        .status-wait { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>【ホテルマネージャー用】フィードバック管理</h2>
+    <p><a href="/">＜ 投稿フォームに戻る</a></p>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>お名前</th>
+                <th>評価</th>
+                <th>ご意見内容</th>
+                <th>ステータス</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in feedbacks %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[1] }}</td>
+                <td>★{{ item[2] }}</td>
+                <td>{{ item[3] }}</td>
+                <td>
+                    {% if item[4] == '解決済' %}
+                        <span class="status-done">解決済</span>
+                    {% else %}
+                        <span class="status-wait">未対応</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item[4] != '解決済' %}
+                    <form action="/admin/complete/{{ item[0] }}" method="POST">
+                        <button type="submit">完了にする</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
